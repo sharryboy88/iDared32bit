@@ -15,12 +15,18 @@ jobs:
         with:
           submodules: recursive
 
+      - name: Install compatible CMake
+        run: |
+          curl -fL -o cmake.tar.gz https://github.com/Kitware/CMake/releases/download/v3.31.6/cmake-3.31.6-macos-universal.tar.gz
+          tar -xzf cmake.tar.gz
+          echo "CMAKE=$GITHUB_WORKSPACE/cmake-3.31.6-macos-universal/CMake.app/Contents/bin/cmake" >> "$GITHUB_ENV"
+
       - name: Show build tools
         run: |
           xcodebuild -version
           rustc --version
           cargo --version
-          cmake --version
+          "$CMAKE" --version
 
       - name: Install iOS Rust target
         run: rustup target add aarch64-apple-ios
